@@ -7,6 +7,9 @@
   var lr = spreadsheet.getLastRow();
   var count = spreadsheet.getRange("A2:B"+lr+"").getValues();
 
+  // Create folder
+  var newFolder = spreadsheet.getRange('C1').getValue();
+
   // For loop to iterate sheet data
   for (x=0; x<count.length; x++){
     var shift = count[x];
@@ -19,9 +22,12 @@
     var url = shift[1];
   }
 
+// Function that downloads images from the spreadsheet
 function downloadImages() {
   var response = UrlFetchApp.fetch(url);
   var file = response.getBlob().getAs('image/jpeg').setName(filename);
-  DriveApp.createFile(file);
+  DriveApp.createFolder(newFolder);
+  DriveApp.getRootFolder().createFile(file);
   Logger.log(filename);
+  Logger.log(DriveApp.getRootFolder());
 }
