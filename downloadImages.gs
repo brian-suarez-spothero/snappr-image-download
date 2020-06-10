@@ -13,18 +13,15 @@
     
     // Variables from sheet data
     //
+    // Gets the filename from A column
+    var filename = shift[0];
     // Gets the URL from the B column
     var url = shift[1];
-    //
-    // Gets the filename from A column
-    var filename = shift[2];
   }
 
 function downloadImages() {
   var response = UrlFetchApp.fetch(url);
-  var file = response.getBlob().getAs('image/jpeg');
-  // TODO
-  // Use filename and place in 'Photography' shared folder
+  var file = response.getBlob().getAs('image/jpeg').setName(filename);
   DriveApp.createFile(file);
   Logger.log(filename);
 }
