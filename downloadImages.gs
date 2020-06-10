@@ -23,6 +23,8 @@
 function downloadImages() {
   var response = UrlFetchApp.fetch(url);
   var file = response.getBlob().getAs('image/jpeg');
+  // TODO
+  // Use filename and place in 'Photography' shared folder
   DriveApp.createFile(file);
   Logger.log(filename);
 }
