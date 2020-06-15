@@ -1,5 +1,7 @@
 // Global Variables
 
+var n=0;
+
   // Create folder in 'snappr-photo-download'
   var dir = DriveApp.getFolderById('16q9Vs4TBp80r-n6PGNXrn3q_zpO4Rcyh');
   var newFolder = Date.now()+"-"+Session.getEffectiveUser().getUsername();
@@ -25,11 +27,12 @@ function downloadImages() {
     var url = shift[1];
   
   // Downloads images from the spreadsheet to the 'newFolder'
-  options = {muteHttpExceptions: true};
-  var response = UrlFetchApp.fetch(url,options);
-  var file = response.getBlob().setName(filename);
-  DriveApp.getFoldersByName(newFolder).next().createFile(file);
-  Logger.log(response.getContentText())
+    options = {muteHttpExceptions: true};
+    var response = UrlFetchApp.fetch(url,options);
+    var file = response.getBlob().setName(filename);
+    DriveApp.getFoldersByName(newFolder).next().createFile(file);
+    Logger.log(filename);
+    Logger.log(response.getContentText());
   }
   
   Logger.log(DriveApp.getFoldersByName(newFolder).next().getId());
