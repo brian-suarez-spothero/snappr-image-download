@@ -24,12 +24,14 @@ function downloadImages() {
     // Gets the URL from the B column
     var url = shift[1];
   
-  // Function that downloads images from the spreadsheet to the 'newFolder'
-  var response = UrlFetchApp.fetch(url);
-  var file = response.getBlob().getAs('image/jpeg').setName(filename);
+  // Downloads images from the spreadsheet to the 'newFolder'
+  options = {muteHttpExceptions: true};
+  var response = UrlFetchApp.fetch(url,options);
+  var file = response.getBlob().setName(filename);
   DriveApp.getFoldersByName(newFolder).next().createFile(file);
-  
+  Logger.log(response.getContentText())
   }
+  
   Logger.log(DriveApp.getFoldersByName(newFolder).next().getId());
   MailApp.sendEmail(
     Session.getEffectiveUser().getEmail(), 
