@@ -7,9 +7,16 @@ var n=0;
   var newFolder = Date.now()+"-"+Session.getEffectiveUser().getUsername();
   dir.createFolder(newFolder);
 
+// Function to prevent Exceeding the Maximum Execution Time Limit for Google App Scripts
+function isTimeUp_(start) {
+  var now = new Date();
+  return now.getTime() - start.getTime() > 300000; // 5 minutes
+}
+
 function downloadImages() {
   // Creates a new spreadsheet
   var spreadsheet = SpreadsheetApp.getActiveSheet();
+  var start = new Date();
 
   // Figure out the last row of data
   var lr = spreadsheet.getLastRow();
@@ -17,8 +24,15 @@ function downloadImages() {
 
   // For loop to iterate sheet data
   for (x=0; x<count.length; x++){
-    var shift = count[x];
     
+    // conditional statement for isTimeUp function
+    if (isTimeUp_(start)) {
+      Logger.log("Time up");
+      Logger.log("Stopped at cell "+spreadsheet.getCurrentCell());
+      break;
+    }
+    else
+    var shift = count[x];
     // Variables from sheet data
     //
     // Gets the filename from A column
@@ -32,8 +46,9 @@ function downloadImages() {
     var file = response.getBlob().setName(filename);
     DriveApp.getFoldersByName(newFolder).next().createFile(file);
     Logger.log(filename);
+    Logger.log(new Date().getTime() - start.getTime());
     Logger.log(response.getContentText());
-  }
+}
   
   Logger.log(DriveApp.getFoldersByName(newFolder).next().getId());
   MailApp.sendEmail(
