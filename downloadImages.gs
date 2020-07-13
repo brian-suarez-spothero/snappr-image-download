@@ -11,6 +11,7 @@ var n=0;
 function isTimeUp_(start) {
   var now = new Date();
   return now.getTime() - start.getTime() > 300000; // 5 minutes
+  //return now.getTime() - start.getTime() > 9000;
 }
 
 function downloadImages() {
@@ -28,7 +29,7 @@ function downloadImages() {
     // conditional statement for isTimeUp function
     if (isTimeUp_(start)) {
       Logger.log("Time up");
-      Logger.log("Stopped at cell "+spreadsheet.getCurrentCell());
+      Logger.log("Stopped at cell "+(x-1));
       break;
     }
     else
@@ -50,12 +51,13 @@ function downloadImages() {
     Logger.log(response.getContentText());
 }
   
+  // Sends completion email
   Logger.log(DriveApp.getFoldersByName(newFolder).next().getId());
   MailApp.sendEmail(
     Session.getEffectiveUser().getEmail(), 
     
-    "Your photos have been downloaded successfully to Google Drive", 
+    "Your photos have been downloaded to Google Drive", 
     
-    "Please click this link to see your photos "+"https://drive.google.com/drive/folders/"+DriveApp.getFoldersByName(newFolder).next().getId()
+    "The process ended at cell "+x+". Please click this link to see your photos "+"https://drive.google.com/drive/folders/"+DriveApp.getFoldersByName(newFolder).next().getId()
     )
 }
